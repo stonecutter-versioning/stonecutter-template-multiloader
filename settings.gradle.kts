@@ -46,4 +46,4 @@ stonecutter {
     }
 }
 
-rootProject.name = "Template"
+rootProject.name = "Template Multiloader"

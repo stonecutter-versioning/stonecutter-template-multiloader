@@ -34,6 +34,12 @@ dependencies {
 neoForge {
     version = property("deps.neo_loader") as String
 
+    mods {
+        register("template") {
+            sourceSet(sourceSets.main.get())
+        }
+    }
+
     runs {
         register("client") {
             gameDirectory = file("../../run/")
@@ -80,7 +86,6 @@ tasks {
         dependsOn("stonecutterGenerate")
     }
 
-    // Builds the version into a shared folder in `build/libs/${mod version}/`
     register<Copy>("buildAndCollect") {
         group = "build"
         description = "Builds mod jars and copies results to `build/libs/{mod version}/`"

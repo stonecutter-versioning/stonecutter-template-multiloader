@@ -91,6 +91,13 @@ tasks {
         dependsOn("stonecutterGenerate")
     }
 
+    // Includes the license file in the built mod
+    withType<Jar> {
+        val name = project.property("mod.id")
+        inputs.property("mod_id", name)
+        from("../../LICENSE") { rename { "$it-$name" } }
+    }
+
     register<Copy>("buildAndCollect") {
         group = "build"
         description = "Builds mod jars and copies results to `build/libs/{mod version}/`"

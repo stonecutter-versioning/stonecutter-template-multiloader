@@ -1,5 +1,5 @@
 plugins {
-    id("net.neoforged.moddev") version "2.0.140"
+    id("net.neoforged.moddev") version "2.0.147"
     id("neoforge-mutex")
 }
 
@@ -66,17 +66,16 @@ java {
 
 tasks {
     processResources {
-        fun MutableMap<String, String>.register(key: String, property: String) {
-            val value: String = sc.properties[property]
+        fun MutableMap<String, String>.register(key: String, value: String) {
             inputs.property(key, value)
             set(key, value)
         }
 
         val props = buildMap {
-            register("id", "mod.id")
-            register("name", "mod.name")
-            register("version", "mod.version")
-            register("minecraft", "mod.mc_compat")
+            register("id", sc.properties["mod.id"])
+            register("name", sc.properties["mod.name"])
+            register("version", sc.properties["mod.version"])
+            register("minecraft", sc.properties["mod.mc_compat"])
         }
 
         filesMatching("META-INF/neoforge.mods.toml") { expand(props) }

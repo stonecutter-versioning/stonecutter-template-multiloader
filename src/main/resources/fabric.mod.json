@@ -24,7 +24,7 @@
   ],
   "accessWidener": "template.ct",
   "depends": {
-    "fabricloader": ">=0.17",
+    "fabricloader": ">=${loader}",
     "minecraft": "${minecraft}"
   }
 }

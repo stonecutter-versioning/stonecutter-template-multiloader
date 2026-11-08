@@ -1,10 +1,10 @@
 plugins {
-    id("net.neoforged.moddev") version "2.0.147"
+    id("net.neoforged.moddev") version "2.0.148"
     id("neoforge-mutex")
 }
 
-version = "${property("mod.version")}+${sc.current.version}"
-base.archivesName = "${property("mod.id") as String}-neoforge"
+version = "${sc.properties["mod.version"]}+${sc.current.version}"
+base.archivesName = "${sc.properties["mod.id"]}-neoforge"
 
 val requiredJava = when {
     sc.current.parsed >= "26.1" -> JavaVersion.VERSION_25
@@ -32,7 +32,7 @@ dependencies {
 }
 
 neoForge {
-    version = property("deps.neo_loader") as String
+    version = sc.properties["deps.neo_loader"]
 
     mods {
         register("template") {
@@ -92,7 +92,7 @@ tasks {
 
     // Includes the license file in the built mod
     withType<Jar> {
-        val name = project.property("mod.id")
+        val name = sc.properties["mod.id"]
         inputs.property("mod_id", name)
         from("../../LICENSE") { rename { "$it-$name" } }
     }
@@ -101,8 +101,8 @@ tasks {
         group = "build"
         description = "Builds mod jars and copies results to `build/libs/{mod version}/`"
 
-        inputs.property("version", project.property("mod.version"))
+        inputs.property("version", sc.properties["mod.version"])
         from(jar.flatMap { it.archiveFile }, named<Jar>("sourcesJar").flatMap { it.archiveFile })
-        into(rootProject.layout.buildDirectory.file("libs/${project.property("mod.version")}"))
+        into(rootProject.layout.buildDirectory.file("libs/${sc.properties["mod.version"]}"))
     }
 }

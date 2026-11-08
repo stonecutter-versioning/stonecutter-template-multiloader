@@ -1,7 +1,3 @@
-plugins {
-    id("dev.kikugie.stonecutter")
-}
-
 stonecutter active "26.3-fabric"
 
 // See https://stonecutter.kikugie.dev/wiki/config/params
@@ -18,10 +14,10 @@ stonecutter parameters {
         match(loader, "fabric", "neoforge")
     }
 
-    swaps["mod_version"] = "\"${properties.get<String>("mod.version")}\";"
-    swaps["minecraft"] = "\"${node.metadata.version}\";"
-    constants["release"] = properties.get<String>("mod.id") != "template"
-    dependencies["fapi"] = properties.getOrNull<String>("deps.fabric_api") ?: "0"
+    swaps["mod_version"] = "\"${properties["mod.version"]}\";"
+    swaps["minecraft"] = "\"${current.version}\";"
+    constants["release"] = properties["mod.id"] != "template"
+    targets["fapi"] = properties.getOrNull("deps.fabric_api") ?: "0"
 
     replacements {
         string(current.parsed >= "1.21.11") {

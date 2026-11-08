@@ -4,8 +4,8 @@ plugins {
 }
 
 // DO NOT set group = ...!
-version = "${property("mod.version")}+${sc.current.version}"
-base.archivesName = "${property("mod.id") as String}-fabric"
+version = "${sc.properties["mod.version"]}+${sc.current.version}"
+base.archivesName = "${sc.properties["mod.id"]}-fabric"
 
 val requiredJava: JavaVersion = when {
     sc.current.parsed >= "26.1" -> JavaVersion.VERSION_25
@@ -46,7 +46,7 @@ dependencies {
     loomx.applyMojangMappings()
 
     // Use `mod{dependency type}` even on 26.1+ - loom-back-compat converts them
-    modImplementation("net.fabricmc:fabric-loader:${property("deps.fabric_loader")}")
+    modImplementation("net.fabricmc:fabric-loader:${sc.properties["deps.fabric_loader"]}")
     fapi("fabric-lifecycle-events-v1", "fabric-resource-loader-v0", "fabric-content-registries-v0", "fabric-registry-sync-v0")
 }
 
@@ -92,7 +92,7 @@ tasks {
             register("name", sc.properties["mod.name"])
             register("version", sc.properties["mod.version"])
             register("minecraft", sc.properties["mod.mc_compat"])
-            register("loader", Regex("\\d+\\.\\d+").find(sc.properties.get<String>("deps.fabric_loader"))!!.value)
+            register("loader", Regex("\\d+\\.\\d+").find(sc.properties["deps.fabric_loader"])!!.value)
         }
 
         filesMatching("fabric.mod.json") { expand(props) }
@@ -105,7 +105,7 @@ tasks {
 
     // Includes the license file in the built mod
     withType<Jar> {
-        val name = project.property("mod.id")
+        val name = sc.properties["mod.id"]
         inputs.property("mod_id", name)
         from("../../LICENSE") { rename { "$it-$name" } }
     }
@@ -114,9 +114,9 @@ tasks {
         group = "build"
         description = "Builds mod jars and copies results to `build/libs/{mod version}/`"
 
-        inputs.property("version", project.property("mod.version"))
+        inputs.property("version", sc.properties["mod.version"])
         // loomx.mod(Sources)Jar returns the jar task for the applied loom variant
         from(loomx.modJar.flatMap { it.archiveFile }, loomx.modSourcesJar.flatMap { it.archiveFile })
-        into(rootProject.layout.buildDirectory.file("libs/${project.property("mod.version")}"))
+        into(rootProject.layout.buildDirectory.file("libs/${sc.properties["mod.version"]}"))
     }
 }

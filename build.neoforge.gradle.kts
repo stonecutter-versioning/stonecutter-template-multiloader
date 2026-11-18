@@ -2,7 +2,6 @@ import dev.kikugie.stonecutter.controller.task.StonecutterTaskMutexService
 
 plugins {
     id("net.neoforged.moddev") version "2.0.148"
-    id("neoforge-mutex")
 }
 
 version = "${sc.properties["mod.version"]}+${sc.current.version}"
